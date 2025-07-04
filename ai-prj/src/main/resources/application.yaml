@@ -1,0 +1,21 @@
+spring:
+  config:
+    import: classpath:db.yaml
+  application:
+    name: ai-prj
+  ai:
+    openai:
+      api-key: ${GEMINI_API_KEY}
+      chat:
+        base-url: "https://generativelanguage.googleapis.com/v1beta/openai/"
+        options:
+          model: gemini-2.5-flash
+          temperature: 0.7
+        completions-path: "/chat/completions"
+    chat:
+      memory:
+        repository:
+          jdbc:
+            initialize-schema: never
+server:
+  port: 8081
