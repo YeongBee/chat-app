@@ -1,15 +1,16 @@
 package com.ai.aiprj.domain.gemini.controller;
 
+import com.ai.aiprj.domain.gemini.entity.ChatEntity;
+import com.ai.aiprj.domain.gemini.service.ChatService;
 import com.ai.aiprj.domain.openai.dto.RequestDTO;
 import com.ai.aiprj.domain.gemini.service.GeminiService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -18,6 +19,7 @@ import reactor.core.publisher.Flux;
 public class AIController {
 
     private final GeminiService geminiService;
+    private final ChatService chatService;
 
     @PostMapping("/test/gemini")
     public ResponseEntity<?> geminiTest(@RequestBody RequestDTO request) {
@@ -42,6 +44,31 @@ public class AIController {
             log.error("Error processing stream request", e);
             return ResponseEntity.status(500)
                     .body(Flux.just("Error: " + e.getMessage()));
+        }
+    }
+
+    @GetMapping("/api/chat/history/{userId}")
+    public List<ChatEntity> userHistory(@PathVariable("userId") String userId) {
+        try {
+            return chatService.getChats(userId);
+        } catch (Exception e) {
+            log.error("채팅 목록 불러오기 실패: {}", userId, e);
+            throw new RuntimeException("채팅 목록 불러오기 실패", e);
+        }
+    }
+
+    @GetMapping("/api/chat/history/{userId}/delete")
+    public List<ChatEntity> userHistoryDelete(@PathVariable("userId") String userId) {
+        try {
+            List<ChatEntity> chats = chatService.getChats(userId);
+            if (chats != null && !chats.isEmpty()) {
+                // Assuming you have a method to delete chats in ChatService
+                chatService.deleteUserHiistory(userId);
+            }
+            return chats;
+        } catch (Exception e) {
+            log.error("채팅 목록 삭제 실패: {}", userId, e);
+            throw new RuntimeException("채팅 목록 삭제 실패", e);
         }
     }
 }
