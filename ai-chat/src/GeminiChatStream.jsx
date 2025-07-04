@@ -7,6 +7,7 @@ function GeminiChatStream() {
     const [messages, setMessages] = useState([]);
     const [loading, setLoading] = useState(false);
     const [streaming, setStreaming] = useState(false);
+    const [currentUserId, setCurrentUserId] = useState('user1234'); // Hardcoded user ID
     const messagesEndRef = useRef(null);
     const abortControllerRef = useRef(null);
 
@@ -18,6 +19,41 @@ function GeminiChatStream() {
     useEffect(() => {
         scrollToBottom();
     }, [messages]);
+
+    // Fetch chat history on component mount
+    useEffect(() => {
+        const fetchHistory = async () => {
+            setLoading(true);
+            try {
+                const res = await fetch(`http://localhost:8081/api/chat/history/${currentUserId}`);
+                if (!res.ok) {
+                    throw new Error(`HTTP error! status: ${res.status}`);
+                }
+                const history = await res.json();
+                const formattedHistory = history.map(item => ({
+                    id: item.id,
+                    type: item.messageType === 'USER' ? 'user' : 'ai',
+                    content: item.content,
+                    timestamp: new Date(item.createdAt)
+                }));
+                setMessages(formattedHistory);
+            } catch (err) {
+                const errorMessage = {
+                    id: Date.now(),
+                    type: 'error',
+                    content: `Failed to load chat history: ${err.message}`,
+                    timestamp: new Date()
+                };
+                setMessages([errorMessage]);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        if (currentUserId) {
+            fetchHistory();
+        }
+    }, [currentUserId]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -164,6 +200,42 @@ function GeminiChatStream() {
         }
     };
 
+    const handleDeleteHistory = async () => {
+        if (!confirm('정말로 모든 대화 기록을 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.')) {
+            return;
+        }
+
+        setLoading(true);
+        try {
+            const res = await fetch(`http://localhost:8081/api/chat/history/${currentUserId}/delete`);
+
+            if (!res.ok) {
+                throw new Error(`HTTP error! status: ${res.status}`);
+            }
+
+            setMessages([]);
+            
+            const successMessage = {
+                id: Date.now(),
+                type: 'ai',
+                content: '대화 기록이 성공적으로 삭제되었습니다.',
+                timestamp: new Date()
+            };
+            setMessages([successMessage]);
+
+        } catch (err) {
+             const errorMessage = {
+                id: Date.now(),
+                type: 'error',
+                content: `기록 삭제 중 오류가 발생했습니다: ${err.message}`,
+                timestamp: new Date()
+            };
+            setMessages(prev => [...prev, errorMessage]);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     const formatTime = (timestamp) => {
         return timestamp.toLocaleTimeString('ko-KR', { 
             hour: '2-digit', 
@@ -174,10 +246,15 @@ function GeminiChatStream() {
     return (
         <div className="chat-container">
             <div className="chat-header">
-                🌊 Gemini AI Stream Chat
-                <div style={{ fontSize: '12px', opacity: 0.8, marginTop: '5px' }}>
-                    실시간 스트리밍 응답
+                <div>
+                    🌊 Gemini AI Stream Chat
+                    <div style={{ fontSize: '12px', opacity: 0.8, marginTop: '5px' }}>
+                        실시간 스트리밍 응답
+                    </div>
                 </div>
+                <button onClick={handleDeleteHistory} className="delete-history-button" title="Delete chat history">
+                    🗑️
+                </button>
             </div>
             
             <div className="chat-messages">
@@ -194,13 +271,16 @@ function GeminiChatStream() {
                 {messages.map((message) => (
                     <div key={message.id} className={`message ${message.type}`}>
                         {message.content}
-                        {message.isStreaming && (
-                            <span className="streaming-cursor">▊</span>
-                        )}
                         <div className="message-meta">
                             {message.type === 'user' ? '나' : message.type === 'ai' ? 'AI' : '오류'} • 
                             {formatTime(message.timestamp)}
-                            {message.isStreaming && ' • 입력 중...'}
+                            {message.isStreaming && (
+                                <div className="typing-indicator">
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                            )}
                         </div>
                     </div>
                 ))}
