@@ -33,7 +33,7 @@ Spring Boot 기반의 AI 채팅 애플리케이션입니다. Google Gemini AI �
 
 ### 1. 프로젝트 클론
 ```bash
-git clone <repository-url>
+git clone https://github.com/YeongBee/chat-app/tree/main/ai-prj
 cd ai-prj
 ```
 
