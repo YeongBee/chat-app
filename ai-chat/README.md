@@ -1,5 +1,3 @@
-# React Chat Front
-
 # AI Chat Application
 
 Gemini AI와 연동된 React 기반 채팅 애플리케이션입니다. 일반 채팅과 실시간 스트리밍 채팅 두 가지 모드를 지원합니다.
