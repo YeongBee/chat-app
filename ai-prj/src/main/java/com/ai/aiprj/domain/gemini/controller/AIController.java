@@ -62,7 +62,6 @@ public class AIController {
         try {
             List<ChatEntity> chats = chatService.getChats(userId);
             if (chats != null && !chats.isEmpty()) {
-                // Assuming you have a method to delete chats in ChatService
                 chatService.deleteUserHiistory(userId);
             }
             return chats;
