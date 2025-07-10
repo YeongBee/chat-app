@@ -1,11 +1,12 @@
 package com.ai.aiprj.domain.gemini.controller;
 
+import com.ai.aiprj.domain.gemini.dto.RequestDTO;
 import com.ai.aiprj.domain.gemini.entity.ChatEntity;
 import com.ai.aiprj.domain.gemini.service.ChatService;
-import com.ai.aiprj.domain.openai.dto.RequestDTO;
 import com.ai.aiprj.domain.gemini.service.GeminiService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.coyote.Request;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
@@ -62,7 +63,7 @@ public class AIController {
         try {
             List<ChatEntity> chats = chatService.getChats(userId);
             if (chats != null && !chats.isEmpty()) {
-                chatService.deleteUserHiistory(userId);
+                chatService.deleteUserHistory(userId);
             }
             return chats;
         } catch (Exception e) {

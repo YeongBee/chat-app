@@ -20,7 +20,7 @@ public class ChatService {
     }
 
     @Transactional
-    public void deleteUserHiistory(String userId) {
+    public void deleteUserHistory(String userId) {
         chatRepository.deleteAllByUserId(userId);
     }
 }

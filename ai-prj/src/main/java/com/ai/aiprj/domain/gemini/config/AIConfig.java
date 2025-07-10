@@ -13,13 +13,13 @@ import org.springframework.transaction.PlatformTransactionManager;
 public class AIConfig {
 
 
-    @Bean
-    public ChatMemoryRepository chatMemoryRepository(JdbcTemplate jdbcTemplate, PlatformTransactionManager transactionManager) {
-        return JdbcChatMemoryRepository.builder()
-                .jdbcTemplate(jdbcTemplate)
-                .transactionManager(transactionManager)
-                .build();
-    }
+//    @Bean
+//    public ChatMemoryRepository chatMemoryRepository(JdbcTemplate jdbcTemplate, PlatformTransactionManager transactionManager) {
+//        return JdbcChatMemoryRepository.builder()
+//                .jdbcTemplate(jdbcTemplate)
+//                .transactionManager(transactionManager)
+//                .build();
+//    }
 
     @Bean
     public ChatClient chatClient(ChatModel chatModel) {

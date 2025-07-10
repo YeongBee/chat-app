@@ -7,6 +7,7 @@ function GeminiChat() {
     const [loading, setLoading] = useState(false);
     const [currentUserId, setCurrentUserId] = useState('user1234'); // Hardcoded user ID
     const messagesEndRef = useRef(null);
+    const textareaRef = useRef(null); // Add ref for textarea
 
     // Fetch chat history on component mount
     useEffect(() => {
@@ -47,6 +48,14 @@ function GeminiChat() {
     useEffect(() => {
         scrollToBottom();
     }, [messages]);
+
+    // Auto-resize textarea based on content
+    useEffect(() => {
+        if (textareaRef.current) {
+            textareaRef.current.style.height = 'auto'; // Reset height to recalculate
+            textareaRef.current.style.height = textareaRef.current.scrollHeight + 'px';
+        }
+    }, [prompt]);
 
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -194,12 +203,14 @@ function GeminiChat() {
             <div className="chat-input">
                 <form onSubmit={handleSubmit} className="input-form">
                     <textarea
+                        ref={textareaRef}
                         value={prompt}
                         onChange={(e) => setPrompt(e.target.value)}
                         onKeyPress={handleKeyPress}
-                        placeholder="Enter a message... (Enter: send, Shift+Enter: new line)"
+                        placeholder="메시지를 입력하세요..."
                         className="input-textarea"
                         disabled={loading}
+                        rows={1}
                     />
                     <button 
                         type="submit" 

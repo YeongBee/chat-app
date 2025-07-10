@@ -2,14 +2,13 @@
 .typing-indicator {
   display: inline-flex;
   align-items: center;
-  margin-left: 8px;
 }
 
 .typing-indicator span {
-  width: 6px;
-  height: 6px;
+  width: 7px;
+  height: 7px;
   margin: 0 2px;
-  background-color: #667eea;
+  background-color: #9ca3af;
   border-radius: 50%;
   animation: bounce 1.4s infinite both;
 }
@@ -19,11 +18,11 @@
 }
 
 .typing-indicator span:nth-child(2) {
-  animation-delay: 0.2s;
+  animation-delay: 0.15s;
 }
 
 .typing-indicator span:nth-child(3) {
-  animation-delay: 0.4s;
+  animation-delay: 0.3s;
 }
 
 @keyframes bounce {
@@ -35,26 +34,114 @@
   }
 }
 
-/* 삭제 버튼 스타일 */
-.delete-history-button {
-    background: none;
-    border: none;
-    color: white;
-    font-size: 20px;
-    cursor: pointer;
-    opacity: 0.7;
-    transition: opacity 0.3s ease;
-}
-
-.delete-history-button:hover {
-    opacity: 1;
-}
-
 /* 정지 버튼 스타일 */
 .stop-button {
-  background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%) !important;
+  background: #EF4444 !important;
 }
 
 .stop-button:hover:not(:disabled) {
-  background: linear-gradient(135deg, #ff5252 0%, #d32f2f 100%) !important;
+  background: #DC2626 !important;
+}
+
+/* 채팅 입력 영역 */
+.input-textarea {
+  flex: 1;
+  padding: 10px 18px;
+  border: 1px solid #d1d5db;
+  border-radius: 20px;
+  resize: none;
+  font-size: 15px;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  max-height: 200px;
+  overflow-y: auto;
+  line-height: 1.5;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;  /* IE and Edge */
+}
+
+.input-textarea::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera*/
+}
+
+.input-textarea:focus {
+  border-color: #3B82F6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* 코드 블록 스타일 */
+.message.ai pre {
+  background-color: #1e293b;
+  color: #e2e8f0;
+  padding: 0;
+  border-radius: 12px;
+  overflow: hidden;
+  font-family: 'Fira Code', 'Courier New', monospace;
+  font-size: 14px;
+  margin: 12px 0;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.message.ai code {
+  font-family: inherit;
+  display: block;
+  padding: 16px;
+  overflow-x: auto;
+}
+
+/* 코드 블록 헤더 */
+.code-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #334155;
+  color: #cbd5e1;
+  padding: 8px 16px;
+  font-size: 13px;
+}
+
+.code-header span {
+  font-weight: 500;
+  text-transform: lowercase;
+}
+
+.copy-button {
+  background-color: transparent;
+  color: #94a3b8;
+  border: none;
+  padding: 4px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: color 0.2s;
+}
+
+.copy-button:hover {
+  color: #e2e8f0;
+}
+
+.copy-button.copied {
+  color: #4ade80;
+}
+
+/* 코드 블록 스크롤바 */
+.message.ai pre code::-webkit-scrollbar {
+  height: 8px;
+}
+
+.message.ai pre code::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.message.ai pre code::-webkit-scrollbar-thumb {
+  background: #475569;
+  border-radius: 4px;
+}
+
+.message.ai pre code::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
 }
