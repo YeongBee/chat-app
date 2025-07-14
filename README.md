@@ -14,6 +14,10 @@
 - **🧠 AI 연동:** 백엔드는 Gemini와 같은 거대 언어 모델(LLM)과 연동됩니다.
 - **💻 최신 기술 스택:** 프론트엔드는 React, 백엔드는 Spring Boot를 사용하여 최신 개발 방식으로 구현되었습니다.
 
+## 영상
+![Image](https://github.com/user-attachments/assets/993f95c4-2416-4898-ab45-e0c271861bfc)
+
+
 ## 📂 프로젝트 구조
 
 - `ai-chat/`: React로 구현된 프론트엔드 애플리케이션
